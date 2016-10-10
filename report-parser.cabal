@@ -12,6 +12,7 @@ build-type:     Simple
 library
   other-modules:       Text.Parsing.Report
   other-modules:       Text.Parsing.Report.String
+  other-modules:       Text.Parsing.Report.Combinator
   build-depends:       base >=4.8,
                        bytestring,
                        attoparsec
@@ -20,6 +21,7 @@ library
   ghc-options:         -Wall
 
 executable readelf-example
+  default-language:    Haskell2010
   main-is:             readelf.hs
   hs-source-dirs:      examples,src
   build-depends:       base >=4.8,

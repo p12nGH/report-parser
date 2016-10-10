@@ -1,31 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Text.Parsing.Report
-import Control.Applicative ((<$>))
-import qualified Data.ByteString.Char8 as BS
 import qualified Data.Attoparsec.ByteString.Char8 as AP
+import Data.Char (isSpace)
 
+ss = AP.skipSpace
+dec = AP.decimal
+word = AP.takeWhile (not . isSpace)
+ssword = ss *> word <* ss
 
---space separated record
-ss p = AP.skipSpace *> p <* AP.skipSpace
+parseSectionHeadersEntry = do
+    parseA $ ss *> "[" *> ss *> dec *> "]" *> ssword
+    <* skip 1
 
-rn = ss $ AP.string "0x" *> AP.hexadecimal
-
-t1 :: Parser [Integer]
-t1 = do
-    parseFullLine $ AP.string "ELF Header:"
-    skipUntilMatch $ parseLine $ AP.string "Dynamic section at offset"
-    skip 1
-    many $ parseLine rn
-
-parseElfHeaderRecord = do
-    AP.skipSpace
-    k <- AP.takeTill ((==) ':')
-    AP.char ':'
-    AP.skipSpace
-    v <- AP.takeByteString
-    return $ (BS.unpack k, BS.unpack v)
-
+-- run: readelf <any ELF binary> | readelf-example
+-- process stdin, print all section names
 main = do
-    x <- parseFile "log.txt" t1
+    x <- processStdIn $ do
+        skipUntil $ startsWith "Section Headers:"
+        skip 3
+        many parseSectionHeadersEntry
     print x
-

@@ -5,7 +5,7 @@ module Text.Parsing.Report.String (
     startsWith
 ) where
 
-import Text.Parsing.Report
+import Text.Parsing.Report.Combinator
 import Data.Char (isSpace)
 import Data.List (isInfixOf, isPrefixOf)
 
