@@ -9,8 +9,10 @@ module Text.Parsing.Report (
     predicate,
     currentLine,
     processStdIn,
-    startsWith
+    startsWith,
+    startsWithSpace
 ) where
 
 import Text.Parsing.Report.String
 import Text.Parsing.Report.Combinator
+import Text.Parsing.Report.Attoparsec

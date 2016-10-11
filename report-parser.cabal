@@ -1,6 +1,6 @@
 name:           report-parser
-version:        0.1.0.0
-synopsis:       Linewise report parser combinator library
+version:        0.1.0.1
+synopsis:       Parser combinator library for parsing log files and text reports.
 homepage:       
 category:       Testing
 author:         Gleb Gagarin
@@ -11,8 +11,7 @@ build-type:     Simple
 
 library
   other-modules:       Text.Parsing.Report
-  other-modules:       Text.Parsing.Report.String
-  other-modules:       Text.Parsing.Report.Combinator
+
   build-depends:       base >=4.8,
                        bytestring,
                        attoparsec

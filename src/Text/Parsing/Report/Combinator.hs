@@ -1,10 +1,12 @@
+{-|
+This module contais parser combinators and utility function.
+-}
+
 module Text.Parsing.Report.Combinator (
     Parser(..),
     many,
     skip,
-    parseFullLine,
     skipUntil,
-    parseA,
     parseFile,
     predicate,
     currentLine,
@@ -13,8 +15,6 @@ module Text.Parsing.Report.Combinator (
 
 import Control.Applicative ((<$>))
 import qualified Data.ByteString.Char8 as BS
-import qualified Data.Attoparsec.ByteString.Char8 as AP
-
 
 type Line = String
 -- type Line = BS.ByteString
@@ -50,14 +50,6 @@ currentLine = Parser f where
     f (_, []) = Nothing
     f (i, x:xs) = Just (i + 1, xs, x)
 
--- use attoparsec parser on current line
-parseA :: AP.Parser a -> Parser a
-parseA p = Parser f where
-    f (_, []) = Nothing
-    f (i, x:xs) = case AP.parseOnly p (BS.pack x) of
-        (Right d) -> Just (i + 1, xs, d)
-        _ -> Nothing
-
 -- try to apply parser until it succeeds or fail at the end of input
 skipUntil :: Parser a -> Parser a
 skipUntil (Parser f) = Parser f' where
@@ -77,9 +69,6 @@ many (Parser pat) = Parser (Just . f') where
         Nothing -> (i, r, [])
         Just (i', r', a) -> (i'', r'', a:a') where
             (i'', r'', a') = f' (i', r')
-
-parseFullLine :: AP.Parser a -> Parser a
-parseFullLine p = parseA $ p <* AP.endOfInput
 
 predicate :: (String -> Bool) -> Parser ()
 predicate p = Parser f where
