@@ -10,7 +10,9 @@ cabal-version:  >= 1.10
 build-type:     Simple
 
 library
-  other-modules:       Text.Parsing.Report
+  exposed-modules:     Text.Parsing.Report
+  other-modules:       Text.Parsing.Report.Combinator,
+                       Text.Parsing.Report.String
 
   build-depends:       base >=4.8,
                        bytestring,
