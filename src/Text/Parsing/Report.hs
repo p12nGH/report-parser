@@ -7,6 +7,7 @@ module Text.Parsing.Report (
     parseA,
     parseFile,
     predicate,
+    choice,
     currentLine,
     processStdIn,
     startsWith,

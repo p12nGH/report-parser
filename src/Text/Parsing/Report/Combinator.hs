@@ -10,7 +10,8 @@ module Text.Parsing.Report.Combinator (
     parseFile,
     predicate,
     currentLine,
-    processStdIn
+    processStdIn,
+    choice
 ) where
 
 import Control.Applicative ((<$>))
@@ -69,6 +70,17 @@ many (Parser pat) = Parser (Just . f') where
         Nothing -> (i, r, [])
         Just (i', r', a) -> (i'', r'', a:a') where
             (i'', r'', a') = f' (i', r')
+
+-- | Try to match each pattern from provided list until once succeeds.
+-- | Fails when all pattern failed.
+choice :: [Parser a] -> Parser a
+choice ps = Parser f where
+    f (i, r) = try i r ps
+    try i r ((Parser p):xs) = case p (i, r) of
+        Nothing -> try i r xs
+        s -> s
+    try _ _ [] = Nothing
+
 
 predicate :: (String -> Bool) -> Parser ()
 predicate p = Parser f where
