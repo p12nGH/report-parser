@@ -8,6 +8,8 @@ module Text.Parsing.Report (
     parseFile,
     predicate,
     choice,
+    within,
+    within',
     currentLine,
     processStdIn,
     startsWith,

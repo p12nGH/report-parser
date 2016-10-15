@@ -11,7 +11,9 @@ module Text.Parsing.Report.Combinator (
     predicate,
     currentLine,
     processStdIn,
-    choice
+    choice,
+    within,
+    within'
 ) where
 
 import Control.Applicative ((<$>))
@@ -81,6 +83,19 @@ choice ps = Parser f where
         s -> s
     try _ _ [] = Nothing
 
+
+-- | Apply first pattern and then apply the second one on the matched range of the first pattern.
+-- | Fails when either first or second pattern fails.
+within :: Parser a -> Parser b -> Parser b
+within a b = snd <$> within' a b
+
+-- | Like within, but return results of both patterns
+within' :: Parser a -> Parser b -> Parser (a, b)
+within' (Parser a) (Parser b) = Parser f where 
+    f s@(i, r) = do
+        (i', r', a') <- a s
+        (_, _, b') <- b (i, take (i' - i) r)
+        return (i', r', (a', b'))
 
 predicate :: (String -> Bool) -> Parser ()
 predicate p = Parser f where
