@@ -8,5 +8,5 @@ mkDerivation {
   libraryHaskellDepends = [ attoparsec base bytestring ];
   executableHaskellDepends = [ attoparsec base bytestring ];
   description = "Parser combinator library for parsing log files and text reports";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }
