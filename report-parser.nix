@@ -1,4 +1,4 @@
-{ mkDerivation, attoparsec, base, bytestring, stdenv }:
+{ mkDerivation, attoparsec, base, bytestring, lib }:
 mkDerivation {
   pname = "report-parser";
   version = "0.1.0.1";
